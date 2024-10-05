@@ -1,7 +1,6 @@
-<div *ngIf="imageUrl">
+
   <h1>Imagen de GIBS</h1>
-  <img [src]="imageUrl" alt="Imagen de GIBS" />
-</div>
-<div *ngIf="!imageUrl">
+  <div id="map" style="height: 600px;"></div>
+<div *ngIf="!map">
   <p>Cargando imagen...</p>
 </div>
