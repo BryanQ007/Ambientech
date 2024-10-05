@@ -24,7 +24,9 @@ export class AppComponent {
   }
 
   initMap() {
-    this.map = L.map('map').setView([this.lat,this.lng], 2);
+    this.map = L.map('map').setView([this.lat,this.lng], 13
+
+    );
 
     // Capa base de OpenStreetMap
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
