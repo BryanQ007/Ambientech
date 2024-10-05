@@ -1,3 +1,4 @@
+import { MapaService } from './../mapa.service';
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {MatSelectModule} from '@angular/material/select';
 import {MatInputModule} from '@angular/material/input';
@@ -16,7 +17,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 export class ModalFormularioComponent  {
   form: FormGroup;
 
-    constructor(private fb: FormBuilder) {
+    constructor(private fb: FormBuilder, public mapaService: MapaService) {
       // Inicializamos el formulario en el constructor
       this.form = this.fb.group({
         image: [null, Validators.required], // Control para la imagen
@@ -28,6 +29,11 @@ export class ModalFormularioComponent  {
 
 
   onSubmit(){
+
+  }
+
+  cancel(){
+    this.mapaService.vistaVer = false;
 
   }
 

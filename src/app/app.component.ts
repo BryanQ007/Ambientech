@@ -32,24 +32,4 @@ export class AppComponent {
     this.mapaService.initMap('map');
   }
 
-
-
-// Método que se ejecuta al hacer clic en el mapa
-onMapClick(e: any): void {
-  const coords = e.latlng;
-
-  if (this.mapaService.existMarker(coords)) {
-    // Si el marcador existe, no abrir el modal
-    this.mapaService.vistaCrear = false;
-    this.mapaService.vistaVer = true;
-    console.log('El marcador ya existe en estas coordenadas.');
-  } else {
-    // Si no existe, abrir el modal
-    this.mapaService.vistaCrear = true;
-    this.mapaService.vistaVer = false;
-
-    // Agregar el marcador al array
-    this.mapaService.crearMarker(coords);
-  }
-}
 }
