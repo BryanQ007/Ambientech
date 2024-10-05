@@ -7,7 +7,6 @@ import { Observable } from 'rxjs';
 })
 export class EarthdataService {
 
-
 private baseUrl = 'https://gibs.earthdata.nasa.gov/wmts/epsg4326/'
 
 constructor(private http: HttpClient) { }

@@ -16,7 +16,7 @@ export class AppComponent {
   map: L.Map | undefined;
   lat = -45.8749;
   lng = -67.5203;
-  key = 2;
+  apiKey = 'oIL2iSjvE8VLY6bDa0Le1YeFMcEourWQYn4dgVaq';
   constructor() { }
 
   ngOnInit() {
