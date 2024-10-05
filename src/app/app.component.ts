@@ -65,5 +65,5 @@ onMapClick(e: any): void {
   // Añadir el marcador al mapa y mostrar un popup con las coordenadas
   marker.addTo(this.map!).bindPopup(`Coordenadas: ${lat}, ${lng}`).openPopup();
 }
-
+//funca
 }
