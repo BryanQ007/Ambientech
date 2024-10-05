@@ -3,12 +3,13 @@ import { EarthdataService } from './earthdata.service';
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import * as L from 'leaflet';
+import { ModalComponent } from './modal/modal.component';
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet,CommonModule],
+  imports: [RouterOutlet,CommonModule,ModalComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -16,7 +17,7 @@ export class AppComponent {
   map: L.Map | undefined;
   lat = -45.8749;
   lng = -67.5203;
-  apiKey = 'oIL2iSjvE8VLY6bDa0Le1YeFMcEourWQYn4dgVaq';
+
   constructor() { }
 
   ngOnInit() {
