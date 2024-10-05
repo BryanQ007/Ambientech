@@ -55,4 +55,8 @@ export class MapaService {
     marker.bindPopup(`Coordenadas: ${coords.lat}, ${coords.lng}`).openPopup();
     this.markers.push(marker);
   }
+
+
+
+
 }
