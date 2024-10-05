@@ -1,7 +1,11 @@
 
-<div class="modal">
+<div class="modal" *ngIf="mapaService.vistaVer">
 <app-modal />
 </div>
+
+<div class="modalForm" *ngIf="mapaService.vistaCrear">
+  <app-modalFormulario />
+  </div>
 
 <div class="mapa">
   <div id="map" style="height: 600px;"></div>
