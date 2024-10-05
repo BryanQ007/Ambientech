@@ -14,7 +14,9 @@ import * as L from 'leaflet';
 })
 export class AppComponent {
   map: L.Map | undefined;
-
+  lat = -45.8749;
+  lng = -67.5203;
+  key = 2;
   constructor() { }
 
   ngOnInit() {
@@ -22,7 +24,7 @@ export class AppComponent {
   }
 
   initMap() {
-    this.map = L.map('map').setView([0, 0], 2);
+    this.map = L.map('map').setView([this.lat,this.lng], 2);
 
     // Capa base de OpenStreetMap
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -30,8 +32,8 @@ export class AppComponent {
       attribution: '© OpenStreetMap'
     }).addTo(this.map);
 
-    // Capa WMTS de GIBS
-    const gibsLayer = L.tileLayer('https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/{z}/{y}/{x}.png', {
+    // Capa WMTS de GIBS para MODIS Terra Aerosol
+    const gibsLayer = L.tileLayer('https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_Aerosol/default/2014-04-09/GoogleMapsCompatible_Level6/{z}/{y}/{x}.png', {
       maxZoom: 8, // Ajusta según la resolución que necesites
       attribution: 'NASA GIBS',
     });
