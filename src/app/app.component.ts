@@ -8,12 +8,13 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ModalFormularioComponent } from './modalFormulario/modalFormulario.component';
 import { MapaService } from './mapa.service';
 import { NavbarComponent } from "../../shared/navbar/navbar.component";
+import { FooterComponent } from "../../shared/footer/footer.component";
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, ModalComponent, MatDialogModule, ModalFormularioComponent, NavbarComponent],
+  imports: [RouterOutlet, CommonModule, ModalComponent, MatDialogModule, ModalFormularioComponent, NavbarComponent, FooterComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
