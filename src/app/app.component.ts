@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { EarthdataService } from './earthdata.service';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import * as L from 'leaflet';
 import { ModalComponent } from './modal/modal.component';
+
 
 
 @Component({
@@ -43,5 +44,26 @@ export class AppComponent {
 
     // Añade la capa de GIBS al mapa
     gibsLayer.addTo(this.map);
-  }
+  
+
+ // Escuchar el evento de clic en el mapa
+ this.map.on('click', this.onMapClick.bind(this));  // Usamos .bind(this) para mantener el contexto adecuado
+}
+
+// Método que se ejecuta al hacer clic en el mapa
+onMapClick(e: any): void {
+  const coords = e.latlng;
+  const lat = coords.lat;
+  const lng = coords.lng;
+
+  // Mostrar las coordenadas en consola (opcional)
+  console.log(`Coordenadas: ${lat}, ${lng}`);
+
+  // Crear un marcador en las coordenadas del clic
+  const marker = L.marker([lat, lng]);
+
+  // Añadir el marcador al mapa y mostrar un popup con las coordenadas
+  marker.addTo(this.map!).bindPopup(`Coordenadas: ${lat}, ${lng}`).openPopup();
+}
+
 }
