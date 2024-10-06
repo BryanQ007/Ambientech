@@ -14,6 +14,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { Firestore } from '@angular/fire/firestore';
 
 import { AboutUsComponent } from './about-us/about-us.component';
+import { ReporteService } from './services/reporte.service';
+
 
 
 @Component({
