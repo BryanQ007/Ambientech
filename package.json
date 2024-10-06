@@ -24,9 +24,11 @@
     "@firebasegen/default": "file:generated/javascript/default",
     "@ngrx/store": "^18.0.2",
     "@types/leaflet": "^1.9.12",
+    "express": "^4.21.0",
     "helmet": "^8.0.0",
     "leaflet": "^1.9.4",
     "mongodb": "^6.9.0",
+    "mongoose": "^8.7.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"

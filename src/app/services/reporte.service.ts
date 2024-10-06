@@ -16,4 +16,19 @@ export class ReporteService {
     const body = { reporte, incidente };
     return this.http.post(this.apiUrl, body);
   }
+
+  // Método para obtener todos los reportes
+  getReportes(): Observable<any> {
+    return this.http.get(this.apiUrl);
+  }
+
+  // Método para actualizar un reporte
+  updateReporte(id: string, reporte: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, { reporte });
+  }
+
+  // Método para eliminar un reporte
+  deleteReporte(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
 }
