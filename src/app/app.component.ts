@@ -13,14 +13,13 @@ import { Observable } from 'rxjs';
 import { HttpClientModule } from '@angular/common/http';
 import { Firestore } from '@angular/fire/firestore';
 
+import { AboutUsComponent } from './about-us/about-us.component';
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HttpClientModule, CommonModule,
-     ModalComponent, MatDialogModule, ModalFormularioComponent,
-      NavbarComponent, FooterComponent,MatIconModule],
+  imports: [RouterOutlet, HttpClientModule, CommonModule, ModalComponent, MatDialogModule, ModalFormularioComponent, NavbarComponent, FooterComponent,MatIconModule, AboutUsComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
