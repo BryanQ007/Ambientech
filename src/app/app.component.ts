@@ -11,12 +11,13 @@ import { NavbarComponent } from "../../shared/navbar/navbar.component";
 import { FooterComponent } from "../../shared/footer/footer.component";
 import { Observable } from 'rxjs';
 import { HttpClientModule } from '@angular/common/http';
+import { AboutUsComponent } from './about-us/about-us.component';
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HttpClientModule, CommonModule, ModalComponent, MatDialogModule, ModalFormularioComponent, NavbarComponent, FooterComponent,MatIconModule],
+  imports: [RouterOutlet, HttpClientModule, CommonModule, ModalComponent, MatDialogModule, ModalFormularioComponent, NavbarComponent, FooterComponent,MatIconModule, AboutUsComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
