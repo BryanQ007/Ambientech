@@ -8,7 +8,7 @@ export interface MapaState {
   vistaVer: boolean;
   vistaCrear: boolean;
   formData: FormDataState; // Estado del formulario
-  selectedMarkerData: Marker | null; // Añadir esta propiedad
+  selectedMarkerData: Marker | null; // Estado del marcador seleccionado
 }
 
 // Estado inicial

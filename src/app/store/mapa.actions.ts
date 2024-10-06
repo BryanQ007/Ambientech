@@ -14,10 +14,10 @@ export const setVistaCrear = createAction(
 
 export const setFormData = createAction(
   '[Form] Set Form Data',
-  props<{ formData: Partial<FormDataState> }>()
+  props<{ formData: FormDataState }>()
 );
 
-export const setMarkerData = createAction(
-  '[Mapa] Set Marker Data',
-  props<{ markerData: Marker }>() // Pasar los datos del marcador seleccionado
+export const setSelectedMarkerData = createAction(
+  '[Mapa] Set Selected Marker Data',
+  props<{ marker: Marker | null }>()
 );

@@ -1,21 +1,27 @@
-<div class="vistaVer">
 <mat-card class="example-card" appearance="outlined">
   <mat-card-header>
     <div mat-card-avatar class="example-header-image"></div>
-    <mat-card-title>Shiba Inu</mat-card-title>
-    <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+    <mat-card-title>{{ selectedMarkerData?.titulo || 'Título del Marcador' }}</mat-card-title>
+    <mat-card-subtitle>{{ selectedMarkerData?.tipo_incidente || 'Tipo de Incidente' }}</mat-card-subtitle>
   </mat-card-header>
-  <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
-  <mat-card-content>
+  <img mat-card-image [src]="selectedMarkerData?.img || 'https://via.placeholder.com/400'" alt="Imagen del Incidente" class="imgPath">
+  <mat-card-content class="scrollable-content">
     <p>
-      The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-      A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-      bred for hunting.
+      <strong>Descripción:</strong> {{ selectedMarkerData?.descripcion || 'Descripción del incidente no disponible.' }}
+    </p>
+    <p>
+      <strong>Prioridad:</strong> {{ selectedMarkerData?.prioridad || 'No especificada' }}
+    </p>
+    <p>
+      <strong>Fecha:</strong> {{ selectedMarkerData?.fecha | date:'short' || 'Fecha no disponible' }}
+    </p>
+    <p>
+      <strong>Coordenadas:</strong> [{{ selectedMarkerData!.coordenadas[0]}}, {{ selectedMarkerData!.coordenadas[1]}}]
     </p>
   </mat-card-content>
   <mat-card-actions>
+    <button mat-button (click)="closeModal()">Cerrar</button>
     <button mat-button>LIKE</button>
     <button mat-button>SHARE</button>
   </mat-card-actions>
 </mat-card>
-</div>

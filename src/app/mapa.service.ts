@@ -7,8 +7,6 @@ import * as MapaActions from './store/mapa.actions';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';  // Importar HttpClient para cargar el JSON
 
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -21,7 +19,8 @@ export class MapaService {
   selectedlng: number = 0;
   vistaVer$: Observable<boolean>;
   vistaCrear$: Observable<boolean>;
-  formDate$: Observable<FormDataState>
+  formDate$: Observable<FormDataState>;
+  selectedMarkerData$: Observable<Marker | null>;
 
 
 
@@ -29,6 +28,7 @@ export class MapaService {
     this.vistaVer$ = this.store.select(state => state.mapa.vistaVer);
     this.vistaCrear$ = this.store.select(state => state.mapa.vistaCrear);
     this.formDate$ = this.store.select(state => state.mapa.formData);
+    this.selectedMarkerData$ = this.store.select(state => state.mapa.selectedMarkerData);
   }
 
   initMap(mapElementId: string) {
@@ -118,6 +118,20 @@ export class MapaService {
     }
   }
 
+  searchMarker(coords: L.LatLng) {
+    const foundMarker = this.markers.find(marker => marker.getLatLng().equals(coords));
+
+    if (foundMarker) {
+      // Si se encuentra el marcador, obtenemos los datos
+      const markerData = (foundMarker as any).markerData; // Asegúrate de que markerData está asociado correctamente
+
+      // Despachar acción para establecer el marcador seleccionado en el store
+      this.store.dispatch(MapaActions.setSelectedMarkerData({ marker: markerData }));
+    } else {
+      console.log('Marcador no encontrado en estas coordenadas.');
+    }
+  }
+
 
   // Método para crear un icono personalizado
   getIcon(tipo_incidente: string): L.Icon {
@@ -143,20 +157,10 @@ export class MapaService {
   }
 
   openModal(markerData: Marker) {
-    // Aquí puedes despachar una acción para abrir el modal en tu store,
-    // o manejar la lógica directamente si estás utilizando un servicio/modal específico.
+    console.log('Abriendo modal con los datos:', markerData);
     this.store.dispatch(MapaActions.setVistaVer({ vistaVer: true }));
     this.store.dispatch(MapaActions.setVistaCrear({ vistaCrear: false }));
-
-    this.store.dispatch(MapaActions.setFormData({
-      formData: {
-        marker: markerData // Asegúrate de que estás envolviendo markerData correctamente
-      }
-    }));
-
-    // Envía los datos del marcador al modal, si es necesario
-    console.log('Datos del marcador:', markerData);
-    // Aquí también puedes implementar la lógica para mostrar el modal
+    this.searchMarker(L.latLng(markerData.coordenadas[0], markerData.coordenadas[1]));
   }
 
 
@@ -210,6 +214,41 @@ export class MapaService {
       });
     }
   }
+
+  crearMarkerForm(coords: L.LatLng, formData: Marker) {
+    this.selectedLat = coords.lat;
+    this.selectedlng = coords.lng;
+
+    if (this.map) {
+      // Crear el marcador con los datos del formulario
+      const markerData: Marker = {
+        id: formData.id || new Date().getTime(), // Usar ID existente o generar uno nuevo
+        coordenadas: [coords.lat, coords.lng],
+        tipo_incidente: formData.tipo_incidente, // Usar tipo del formulario o uno predeterminado
+        usuario: formData.usuario || 'usuario', // Usar usuario del formulario o uno predeterminado
+        fecha: formData.fecha || new Date(),
+        titulo: formData.titulo,
+        prioridad: formData.prioridad, // Usar prioridad del formulario o una predeterminada
+        img: formData.img || '', // Si aplica
+        descripcion: formData.descripcion || 'Descripción del nuevo marcador', // Usar descripción del formulario
+      };
+
+      console.log("creando marker form", markerData)
+
+      const marker = L.marker([coords.lat, coords.lng]).addTo(this.map);
+      marker.bindPopup(`Coordenadas: ${coords.lat}, ${coords.lng}`).openPopup();
+
+      (marker as any).markerData = markerData;
+
+      // Agregar evento de clic al marcador
+      marker.on('click', () => {
+        this.openModal(markerData); // Abre el modal con los datos del marcador
+      });
+
+      this.markers.push(marker);
+    }
+  }
+
 /*   cargarMarkersJson(coords: number[]) {
     if (this.map && coords.length === 2) {
       const lat = coords[0]; // Latitud
