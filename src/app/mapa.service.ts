@@ -151,6 +151,7 @@ export class MapaService {
     console.log('Abriendo modal con los datos:', markerData);
     this.store.dispatch(MapaActions.setVistaVer({ vistaVer: true }));
     this.store.dispatch(MapaActions.setVistaCrear({ vistaCrear: false }));
+    this.disableMapClicks();
     this.searchMarker(L.latLng(markerData.coordenadas[0], markerData.coordenadas[1]), markerData.id);
   }
 
