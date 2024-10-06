@@ -14,6 +14,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { Firestore } from '@angular/fire/firestore';
 
 import { AboutUsComponent } from './about-us/about-us.component';
+import { environment } from './enviroments/enviroment';
 
 
 @Component({
@@ -25,25 +26,14 @@ import { AboutUsComponent } from './about-us/about-us.component';
 })
 
 export class AppComponent implements OnInit{
-  map: L.Map | undefined;
-  lat = -45.8749;
-  lng = -67.5203;
-  private markers: L.Marker[] = [];
-  componentToShow: string | null = null;
-  vistaVer$: Observable<boolean>;
-  vistaCrear$: Observable<boolean>;
-  firestore: Firestore = inject(Firestore);
 
-  constructor(public mapaService: MapaService) {
-    this.vistaVer$ = this.mapaService.vistaVer$;
-    this.vistaCrear$ = this.mapaService.vistaCrear$;
+
+  constructor() {
+
   }
 
   ngOnInit() {
-    this.mapaService.initMap('map');
+
   }
 
-  restore(){
-    this.mapaService.volverComodoro('map')
-  }
 }

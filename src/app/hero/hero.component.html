@@ -1,0 +1,14 @@
+
+<div class="modal" *ngIf="vistaVer$ |async">
+  <app-modal />
+  </div>
+
+  <div class="modalForm" *ngIf="vistaCrear$|async">
+    <app-modalFormulario />
+    </div>
+
+<div class="mapa">
+  <div id="map" style="height: 600px;"></div>
+
+  <button mat-raised-button color="primary" class="restoreButton" (click)="restore()"><mat-icon>restore</mat-icon></button>
+</div>
