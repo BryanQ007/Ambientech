@@ -9,12 +9,15 @@ import { MapaService } from './mapa.service';
 import { NavbarComponent } from "../../shared/navbar/navbar.component";
 import { FooterComponent } from "../../shared/footer/footer.component";
 import { Observable } from 'rxjs';
-
+import {MatIconModule} from '@angular/material/icon'
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, ModalComponent, MatDialogModule, ModalFormularioComponent, NavbarComponent, FooterComponent],
+  imports: [RouterOutlet, CommonModule,
+     ModalComponent, MatDialogModule,
+      ModalFormularioComponent, NavbarComponent,
+       FooterComponent,MatIconModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -37,4 +40,7 @@ export class AppComponent {
     this.mapaService.initMap('map');
   }
 
+  restore(){
+    this.mapaService.volverComodoro('map')
+  }
 }
