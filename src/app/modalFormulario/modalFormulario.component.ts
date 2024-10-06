@@ -11,6 +11,7 @@ import { AppState } from '../store/mapa.store';
 import { Observable } from 'rxjs';
 import * as MapaActions from '../store/mapa.actions';
 import { Marker } from '../marker.interface';
+import L from 'leaflet';
 @Component({
   selector: 'app-modalFormulario',
   standalone:true,
@@ -23,6 +24,8 @@ export class ModalFormularioComponent  {
   form: FormGroup;
   vistaVer$: Observable<boolean>;
   vistaCrear$: Observable<boolean>;
+  selectedLat:number = 0;
+  selectedLng:number = 0;
 
     constructor(private fb: FormBuilder, public Store: Store<AppState>, public mapaService: MapaService) {
       this.form = this.fb.group({
@@ -42,28 +45,38 @@ export class ModalFormularioComponent  {
 
 
     onSubmit() {
+
+      this.selectedLat = this.mapaService.selectedLat;
+      this.selectedLng = this.mapaService.selectedlng;
+
       const formValues = this.form.value;
 
+      // Crear un objeto Marker con los datos del formulario
       const markerData: Marker = {
-        id: new Date().getTime(), // Puedes generar un ID único, por ejemplo, con el timestamp
+        id: new Date().getTime(), // Generar un ID único
         coordenadas: [this.mapaService.selectedLat, this.mapaService.selectedlng], // Asigna las coordenadas del marcador
-        tipo_incidente: '', // Asigna el valor correspondiente
-        usuario: '', // Asigna el valor correspondiente
+        tipo_incidente: formValues.image || 'nuevo', // Usa la imagen o un valor predeterminado
+        usuario: 'usuario', // Aquí puedes asignar un valor adecuado
         fecha: new Date(),
         titulo: formValues.topic,
         prioridad: formValues.priority,
-        img: '', // Asigna la imagen si la has manejado
+        img: '', // Aquí puedes asignar la imagen si la has manejado
         descripcion: formValues.description,
       };
 
+      this.mapaService.crearMarkerForm(
+        L.latLng(this.mapaService.selectedLat, this.mapaService.selectedlng),
+        markerData
+      );
+
       // Dispatch de la acción para establecer el formData
       this.Store.dispatch(MapaActions.setFormData({ formData: { marker: markerData } }));
-
       console.log("Datos enviados:", JSON.stringify(markerData, null, 2));
 
       this.Store.dispatch(MapaActions.setVistaCrear({ vistaCrear: false }));
       this.mapaService.enableMapClicks();
     }
+
 
 
   cancel() {
@@ -76,3 +89,4 @@ export class ModalFormularioComponent  {
 
   }
 }
+

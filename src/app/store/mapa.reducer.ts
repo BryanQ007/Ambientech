@@ -1,7 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import * as MapaActions from './mapa.actions';
-import { MapaState,initialState } from './mapa.interface';
-
+import { MapaState, initialState } from './mapa.interface';
 
 export const mapaReducer = createReducer(
   initialState,
@@ -9,16 +8,10 @@ export const mapaReducer = createReducer(
   on(MapaActions.setVistaCrear, (state, { vistaCrear }) => ({ ...state, vistaCrear })),
   on(MapaActions.setFormData, (state, { formData }) => ({
     ...state,
-    formData: {
-      ...state.formData,
-      marker: {
-        ...state.formData.marker,
-        ...formData, // Asegúrate de que formData tenga la estructura de Marker
-      },
-    },
+    formData: { ...formData }, // Mantener el estado del formulario
   })),
-  on(MapaActions.setMarkerData, (state, { markerData }) => ({
+  on(MapaActions.setSelectedMarkerData, (state, { marker }) => ({
     ...state,
-    selectedMarkerData: markerData, // Agregar los datos del marcador seleccionado
-  }))
+    selectedMarkerData: marker, // Actualiza el marcador seleccionado
+  })),
 );
