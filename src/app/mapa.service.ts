@@ -164,5 +164,9 @@ export class MapaService {
     }
   }
 
+  volverComodoro(mapElementId: string){
+    this.map!.setView([this.lat, this.lng], 13);
+  }
+
 
 }
