@@ -1,15 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import * as MapaActions from './mapa.actions';
+import { MapaState,initialState } from './mapa.interface';
 
-export interface MapaState {
-  vistaVer: boolean;
-  vistaCrear: boolean;
-}
-
-export const initialState: MapaState = {
-  vistaVer: false,
-  vistaCrear: false,
-};
 
 export const mapaReducer = createReducer(
   initialState,

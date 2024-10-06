@@ -1,5 +1,4 @@
 import { CommonModule } from '@angular/common';
-import { EarthdataService } from './earthdata.service';
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import * as L from 'leaflet';
@@ -7,6 +6,7 @@ import { ModalComponent } from './modal/modal.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ModalFormularioComponent } from './modalFormulario/modalFormulario.component';
 import { MapaService } from './mapa.service';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -23,8 +23,13 @@ export class AppComponent {
   lng = -67.5203;
   private markers: L.Marker[] = [];
   componentToShow: string | null = null;
+  vistaVer$: Observable<boolean>;
+  vistaCrear$: Observable<boolean>;
 
-  constructor(public mapaService: MapaService) { }
+  constructor(public mapaService: MapaService) {
+    this.vistaVer$ = this.mapaService.vistaVer$;
+    this.vistaCrear$ = this.mapaService.vistaCrear$;
+  }
 
   ngOnInit() {
     this.mapaService.initMap('map');

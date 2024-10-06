@@ -1,9 +1,9 @@
 
-<div class="modal" *ngIf="mapaService.vistaVer">
+<div class="modal" *ngIf="vistaVer$ |async">
 <app-modal />
 </div>
 
-<div class="modalForm" *ngIf="mapaService.vistaCrear">
+<div class="modalForm" *ngIf="vistaCrear$|async">
   <app-modalFormulario />
   </div>
 
