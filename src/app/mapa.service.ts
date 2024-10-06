@@ -5,6 +5,9 @@ import { Store } from '@ngrx/store';
 import { FormDataState, MapaState } from './store/mapa.interface';
 import * as MapaActions from './store/mapa.actions';
 import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';  // Importar HttpClient para cargar el JSON
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +23,9 @@ export class MapaService {
   vistaCrear$: Observable<boolean>;
   formDate$: Observable<FormDataState>
 
-  constructor(public store: Store<{ mapa: MapaState }>) {
+
+
+  constructor(public store: Store<{ mapa: MapaState }>, private http: HttpClient) {
     this.vistaVer$ = this.store.select(state => state.mapa.vistaVer);
     this.vistaCrear$ = this.store.select(state => state.mapa.vistaCrear);
     this.formDate$ = this.store.select(state => state.mapa.formData);
@@ -34,10 +39,59 @@ export class MapaService {
       maxZoom: 19,
       attribution: '© OpenStreetMap'
     }).addTo(this.map);
+    this.loadDataFromJson();
 
     // Escuchar el evento de clic en el mapa
     this.map.on('click', this.onMapClick.bind(this));
   }
+
+
+  loadDataFromJson(): void {
+    this.http.get<any[]>('assets/datos.json').subscribe(data => {
+      data.forEach(incidente => {
+        const coords = incidente.coordenadas;
+        const tipoIncidente = incidente.tipo_incidente;
+
+        // Crear un icono personalizado dependiendo del tipo_incidente
+        const icon = this.getIcon(tipoIncidente);
+
+        // Crear el marcador con el icono personalizado
+       // const marker = L.marker([coords[0], coords[1]], { icon }).addTo(this.map!);
+        this.cargarMarkersJson(coords);
+        // Almacenar los datos en el marcador
+
+
+        // Guardar el marcador en el array de markers
+        //this.markers.push(marker);
+      });
+    });
+  }
+
+
+
+  // Método para crear un icono personalizado
+  getIcon(tipo_incidente: string): L.Icon {
+    let iconUrl = '';
+
+    switch (tipo_incidente) {
+      case 'basura':
+        iconUrl = 'assets/basura.png'; // Icono personalizado para incendios
+        break;
+      case 'accidente':
+        iconUrl = 'assets/incidente.png'; // Icono personalizado para accidentes
+        break;
+      default:
+        iconUrl = 'assets/incidente.png'; // Icono por defecto
+    }
+
+    return L.icon({
+      iconUrl,
+      iconSize: [32, 32],  // Tamaño del icono
+      iconAnchor: [16, 32],  // Ancla del icono (punto donde se coloca en el mapa)
+      popupAnchor: [0, -32]  // Donde aparece el popup respecto al icono
+    });
+  }
+
 
   onMapClick(e: any): void {
     const coords = e.latlng;
@@ -67,6 +121,16 @@ export class MapaService {
     if (this.map) {
       const marker = L.marker([coords.lat, coords.lng]).addTo(this.map);
       marker.bindPopup(`Coordenadas: ${coords.lat}, ${coords.lng}`).openPopup();
+      this.markers.push(marker);
+    }
+  }
+  cargarMarkersJson(coords: number[]) {
+    if (this.map && coords.length === 2) {
+      const lat = coords[0]; // Latitud
+      const lng = coords[1]; // Longitud
+
+      const marker = L.marker([lat, lng]).addTo(this.map!);
+      marker.bindPopup(`Coordenadas: ${lat}, ${lng}`).openPopup();
       this.markers.push(marker);
     }
   }

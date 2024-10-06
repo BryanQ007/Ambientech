@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "coordenadas":  [-45.9210,-67.4959 ],
+    "tipo_alerta": "desperfecto eléctrico",
+    "tipo_incidente": "basura",
+    "usuario": "Sofía Romero",
+    "fecha_hora": "2024-09-29T18:11:40.891118",
+    "mensaje": "Hay un poste de luz que está a punto de caerse.",
+    "imagen": "https://example.com/images/placeholder.jpg"
+  },
+  {
+    "id": 2,
+    "coordenadas": [-45.8251, -67.5399 ],
+    "tipo_alerta": "desperfecto eléctrico",
+    "tipo_incidente": "incidente",
+    "usuario": "Pedro Sánchez",
+    "fecha_hora": "2024-10-03T18:11:40.891350",
+    "mensaje": "Hay un poste de luz que está a punto de caerse.",
+    "imagen": "https://example.com/images/placeholder.jpg"
+  }
+]
