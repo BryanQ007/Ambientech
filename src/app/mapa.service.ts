@@ -39,6 +39,22 @@ export class MapaService {
       maxZoom: 19,
       attribution: '© OpenStreetMap'
     }).addTo(this.map);
+
+
+        // Obtener la fecha actual en formato 'YYYY-MM-DD'
+        const today = new Date().toISOString().split('T')[0];
+
+        // Construir la URL de la capa WMTS de GIBS con la fecha de hoy
+        const gibsUrl = `https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_Aerosol/default/${today}/GoogleMapsCompatible_Level6/{z}/{y}/{x}.png`;
+
+        // Capa WMTS de GIBS para MODIS Terra Aerosol con la fecha dinámica
+        const gibsLayer = L.tileLayer(gibsUrl, {
+          maxZoom: 7, // Ajusta según la resolución que necesites
+          attribution: 'NASA GIBS',
+        });
+
+        // Añadir la capa de GIBS al mapa
+        gibsLayer.addTo(this.map);
     this.loadDataFromJson();
 
     // Escuchar el evento de clic en el mapa
