@@ -12,6 +12,7 @@
 
   width: 40%;
   height: 40%;
+  top:0;
   position: absolute; /* Permite moverlo libremente */
   right: 0; /* Coloca el modal en el lado derecho *//* Ajusta para centrar verticalmente */
   z-index: 1; /* Asegúrate de que esté por encima de otros elementos */

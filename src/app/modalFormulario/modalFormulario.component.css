@@ -1,42 +1,46 @@
+@import "leaflet/dist/leaflet.css";
+
 .vistaVer {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
-  height: 100vh; /* Altura completa de la ventana */
-  background-color: #f9f9f9; /* Color de fondo suave */
+  height: 100vh; /* Ocupa toda la altura de la vista */
+  position: relative; /* Para asegurar que los elementos dentro se posicionen correctamente */
 }
 
 .example-card {
-  width: 350px; /* Ancho de la tarjeta */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+  width: 400px; /* Ancho fijo del modal */
+  padding: 4px; /* Reduce el espaciado interno para achicar la tarjeta */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para profundidad */
   border-radius: 8px; /* Bordes redondeados */
+  max-height: 70%; /* Establece una altura máxima si lo deseas */
+  overflow-y: auto; /* Permite el desplazamiento si el contenido excede la altura */
 }
 
 .mat-card-header {
-  background-color: #1976d2; /* Color de fondo del encabezado */
-  color: white; /* Color del texto */
-  padding: 12px; /* Espaciado interno */
+  background-color: #f5f5f5; /* Color de fondo para el encabezado */
+  border-bottom: 1px solid #e0e0e0; /* Línea inferior para separación */
 }
 
 .mat-card-title {
-  font-size: 1.2em; /* Tamaño de fuente para el título */
+  font-size: 1.5rem; /* Tamaño de fuente más grande */
+  font-weight: bold; /* Negrita para mayor énfasis */
 }
 
 .mat-card-subtitle {
-  font-size: 0.9em; /* Tamaño de fuente para el subtítulo */
+  color: #666; /* Color gris para el subtítulo */
 }
 
-.mat-form-field {
-  width: 100%; /* Ocupa todo el ancho */
-  margin-bottom: 12px; /* Espacio entre campos */
+form {
+  display: flex;
+  flex-direction: column; /* Disposición vertical */
+  gap: 10px; /* Espacio entre los elementos del formulario */
+}
+
+input[type="file"] {
+  margin-bottom: 10px; /* Espacio debajo del campo de archivo */
 }
 
 button {
-  margin-top: 15px; /* Espacio superior para los botones */
-  width: 100%; /* Botón ocupa todo el ancho */
-}
-
-button + button {
-  margin-top: 8px; /* Espacio superior para el botón "Cancelar" */
+  margin-top: 10px; /* Espacio superior para los botones */
 }
