@@ -10,6 +10,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AppState } from '../store/mapa.store';
 import { Observable } from 'rxjs';
 import * as MapaActions from '../store/mapa.actions';
+import { Marker } from '../marker.interface';
 @Component({
   selector: 'app-modalFormulario',
   standalone:true,
@@ -40,10 +41,30 @@ export class ModalFormularioComponent  {
     }
 
 
-  onSubmit(){
-    this.Store.dispatch(MapaActions.setVistaCrear({ vistaCrear: false }));
-    this.mapaService.enableMapClicks();
-  }
+    onSubmit() {
+      const formValues = this.form.value;
+
+      const markerData: Marker = {
+        id: new Date().getTime(), // Puedes generar un ID único, por ejemplo, con el timestamp
+        coordenadas: [this.mapaService.selectedLat, this.mapaService.selectedlng], // Asigna las coordenadas del marcador
+        tipo_incidente: '', // Asigna el valor correspondiente
+        usuario: '', // Asigna el valor correspondiente
+        fecha: new Date(),
+        titulo: formValues.topic,
+        prioridad: formValues.priority,
+        img: '', // Asigna la imagen si la has manejado
+        descripcion: formValues.description,
+      };
+
+      // Dispatch de la acción para establecer el formData
+      this.Store.dispatch(MapaActions.setFormData({ formData: { marker: markerData } }));
+
+      console.log("Datos enviados:", JSON.stringify(markerData, null, 2));
+
+      this.Store.dispatch(MapaActions.setVistaCrear({ vistaCrear: false }));
+      this.mapaService.enableMapClicks();
+    }
+
 
   cancel() {
     this.mapaService.eliminarUltimoMarker();

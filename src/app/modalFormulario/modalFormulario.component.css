@@ -1,13 +1,42 @@
+.vistaVer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  height: 100vh; /* Altura completa de la ventana */
+  background-color: #f9f9f9; /* Color de fondo suave */
+}
+
 .example-card {
-  max-width: 400px;
+  width: 350px; /* Ancho de la tarjeta */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+  border-radius: 8px; /* Bordes redondeados */
 }
 
-.example-header-image {
-  background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
-  background-size: cover;
+.mat-card-header {
+  background-color: #1976d2; /* Color de fondo del encabezado */
+  color: white; /* Color del texto */
+  padding: 12px; /* Espaciado interno */
 }
 
-.mat-card{
-  width: 100%;
-  height: 100%;
+.mat-card-title {
+  font-size: 1.2em; /* Tamaño de fuente para el título */
+}
+
+.mat-card-subtitle {
+  font-size: 0.9em; /* Tamaño de fuente para el subtítulo */
+}
+
+.mat-form-field {
+  width: 100%; /* Ocupa todo el ancho */
+  margin-bottom: 12px; /* Espacio entre campos */
+}
+
+button {
+  margin-top: 15px; /* Espacio superior para los botones */
+  width: 100%; /* Botón ocupa todo el ancho */
+}
+
+button + button {
+  margin-top: 8px; /* Espacio superior para el botón "Cancelar" */
 }

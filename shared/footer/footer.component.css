@@ -1,0 +1,14 @@
+.spacer {
+  flex: 1 1 auto;  /* Espaciador flexible para alinear contenido */
+}
+
+mat-toolbar.footer {
+  position: fixed;  /* Fija el footer al final de la página */
+  bottom: 0;
+  width: 100%;      /* Asegura que el footer ocupe todo el ancho */
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);  /* Sombra ligera */
+}
+
+button {
+  margin-right: 10px;  /* Espacio entre los botones del footer */
+}

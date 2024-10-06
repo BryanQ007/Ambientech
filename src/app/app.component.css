@@ -2,7 +2,7 @@
 
 .modal{
   width: 40%;
-  height: 60%;
+  height: 40%;
   position: absolute; /* Permite moverlo libremente */
   right: 0; /* Coloca el modal en el lado derecho *//* Ajusta para centrar verticalmente */
   z-index: 1; /* Asegúrate de que esté por encima de otros elementos */
@@ -11,7 +11,7 @@
 .modalForm{
 
   width: 40%;
-  height: 60%;
+  height: 40%;
   position: absolute; /* Permite moverlo libremente */
   right: 0; /* Coloca el modal en el lado derecho *//* Ajusta para centrar verticalmente */
   z-index: 1; /* Asegúrate de que esté por encima de otros elementos */

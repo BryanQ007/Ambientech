@@ -1,7 +1,8 @@
+import { Marker } from './marker.interface';
 import { Injectable } from '@angular/core';
 import * as L from 'leaflet';
 import { Store } from '@ngrx/store';
-import { MapaState } from './store/mapa.interface';
+import { FormDataState, MapaState } from './store/mapa.interface';
 import * as MapaActions from './store/mapa.actions';
 import { Observable } from 'rxjs';
 
@@ -13,12 +14,16 @@ export class MapaService {
   lat = -45.8749;
   lng = -67.5203;
   markers: L.Marker[] = [];
+  selectedLat: number = 0;
+  selectedlng: number = 0;
   vistaVer$: Observable<boolean>;
   vistaCrear$: Observable<boolean>;
+  formDate$: Observable<FormDataState>
 
   constructor(public store: Store<{ mapa: MapaState }>) {
     this.vistaVer$ = this.store.select(state => state.mapa.vistaVer);
     this.vistaCrear$ = this.store.select(state => state.mapa.vistaCrear);
+    this.formDate$ = this.store.select(state => state.mapa.formData);
   }
 
   initMap(mapElementId: string) {
@@ -55,8 +60,11 @@ export class MapaService {
     return this.markers.some(marker => marker.getLatLng().equals(coordenada));
   }
 
+
   crearMarker(coords: L.LatLng) {
-    if (this.map) { // Comprobar que `this.map` no es undefined
+    this.selectedLat = coords.lat;
+    this.selectedlng = coords.lng;
+    if (this.map) {
       const marker = L.marker([coords.lat, coords.lng]).addTo(this.map);
       marker.bindPopup(`Coordenadas: ${coords.lat}, ${coords.lng}`).openPopup();
       this.markers.push(marker);
