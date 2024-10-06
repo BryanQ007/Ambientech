@@ -1,0 +1,8 @@
+.modal-info {
+  position: relative;
+  padding: 20px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  width: 400px;
+  margin-top: 20px;
+}

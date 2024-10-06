@@ -9,17 +9,19 @@ import { ModalFormularioComponent } from './modalFormulario/modalFormulario.comp
 import { MapaService } from './mapa.service';
 import { NavbarComponent } from "../../shared/navbar/navbar.component";
 import { FooterComponent } from "../../shared/footer/footer.component";
+import { ModalMostrarInfoMarcasComponent } from './modal-mostrar-info-marcas/modal-mostrar-info-marcas.component';
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, ModalComponent, MatDialogModule, ModalFormularioComponent, NavbarComponent, FooterComponent],
+  imports: [RouterOutlet, CommonModule, ModalComponent, MatDialogModule, ModalFormularioComponent, NavbarComponent, FooterComponent, ModalMostrarInfoMarcasComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 
 export class AppComponent {
+[x: string]: any;
   map: L.Map | undefined;
   lat = -45.8749;
   lng = -67.5203;

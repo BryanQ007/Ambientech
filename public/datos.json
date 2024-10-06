@@ -1,0 +1,139 @@
+[
+  {
+    "id": 1,
+    "coordenadas": [-67.4742273943531, -45.85676285145715],
+    "tipo_alerta": "desperfecto eléctrico",
+    "tipo_incidente": "basura",
+    "usuario": "Sofía Romero",
+    "fecha_hora": "2024-09-29T18:11:40.891118",
+    "mensaje": "Hay un poste de luz que está a punto de caerse.",
+    "imagen": "https://example.com/images/placeholder.jpg"
+  },
+  {
+    "id": 2,
+    "coordenadas": [-67.49315239028793, -45.87850593165639],
+    "tipo_alerta": "desperfecto eléctrico",
+    "tipo_incidente": "incidente",
+    "usuario": "Pedro Sánchez",
+    "fecha_hora": "2024-10-03T18:11:40.891350",
+    "mensaje": "Hay un poste de luz que está a punto de caerse.",
+    "imagen": "https://example.com/images/placeholder.jpg"
+  },
+  {
+    "id": 3,
+    "coordenadas": [-67.47951574256918, -45.85252628246888],
+    "tipo_alerta": "caño roto",
+    "tipo_incidente": "basura",
+    "usuario": "Carlos Rodríguez",
+    "fecha_hora": "2024-10-03T18:11:40.891366",
+    "mensaje": "Se ha roto un caño de agua en la calle.",
+    "imagen": "https://example.com/images/placeholder.jpg"
+  },
+  {
+    "id": 4,
+    "coordenadas": [-67.5139953517374, -45.86785118866359],
+    "tipo_alerta": "caño roto",
+    "tipo_incidente": "incidente",
+    "usuario": "Sofía Perez",
+    "fecha_hora": "2024-09-28T18:11:40.891376",
+    "mensaje": "Se ha roto un caño de agua en la calle.",
+    "imagen": "https://example.com/images/placeholder.jpg"
+  },
+  {
+    "id": 5,
+    "coordenadas": [-67.50635149712541, -45.87992073365443],
+    "tipo_alerta": "desperfecto eléctrico",
+    "tipo_incidente": "incidente",
+    "usuario": "Laura Sánchez",
+    "fecha_hora": "2024-09-30T18:11:40.891385",
+    "mensaje": "Hay un poste de luz que está a punto de caerse.",
+    "imagen": "https://example.com/images/placeholder.jpg"
+  },
+  {
+    "id": 6,
+    "coordenadas": [-67.51499563882997, -45.85611027693858],
+    "tipo_alerta": "caño roto",
+    "tipo_incidente": "incidente",
+    "usuario": "Luis Gómez",
+    "fecha_hora": "2024-09-28T18:11:40.891394",
+    "mensaje": "Se ha roto un caño de agua en la calle.",
+    "imagen": "https://example.com/images/placeholder.jpg"
+  },
+  {
+    "id": 7,
+    "coordenadas": [-67.49996911852595, -45.869063760687936],
+    "tipo_alerta": "desperfecto eléctrico",
+    "tipo_incidente": "basura",
+    "usuario": "María González",
+    "fecha_hora": "2024-09-30T18:11:40.891404",
+    "mensaje": "Hay un poste de luz que está a punto de caerse.",
+    "imagen": "https://example.com/images/placeholder.jpg"
+  },
+  {
+    "id": 8,
+    "coordenadas": [-67.51318032719851, -45.85078437371556],
+    "tipo_alerta": "desperfecto eléctrico",
+    "tipo_incidente": "incidente",
+    "usuario": "Pedro Gómez",
+    "fecha_hora": "2024-09-28T18:11:40.891415",
+    "mensaje": "Hay un poste de luz que está a punto de caerse.",
+    "imagen": "https://example.com/images/placeholder.jpg"
+  },
+  {
+    "id": 9,
+    "coordenadas": [-67.51047061515622, -45.88734811658783],
+    "tipo_alerta": "acumulación de residuos",
+    "tipo_incidente": "incidente",
+    "usuario": "Luis Romero",
+    "fecha_hora": "2024-09-29T18:11:40.891425",
+    "mensaje": "Hay una gran cantidad de basura acumulada en la calle.",
+    "imagen": "https://example.com/images/placeholder.jpg"
+  },
+  {
+    "id": 10,
+    "coordenadas": [-67.49292059131278, -45.880122761367964],
+    "tipo_alerta": "caño roto",
+    "tipo_incidente": "incidente",
+    "usuario": "María Romero",
+    "fecha_hora": "2024-09-30T18:11:40.891434",
+    "mensaje": "Se ha roto un caño de agua en la calle.",
+    "imagen": "https://example.com/images/placeholder.jpg"
+  },
+  {
+    "id": 11,
+    "coordenadas": [-67.50724040810893, -45.87929362001087],
+    "tipo_alerta": "caño roto",
+    "tipo_incidente": "basura",
+    "usuario": "Juan López",
+    "fecha_hora": "2024-09-28T18:11:40.891443",
+    "mensaje": "Se ha roto un caño de agua en la calle.",
+    "imagen": "https://example.com/images/placeholder.jpg"
+  },
+  {
+    "id": 12,
+    "coordenadas": [-67.49787183517587, -45.86735389834664],
+    "tipo_alerta": "acumulación de residuos",
+    "tipo_incidente": "incidente",
+    "usuario": "Ana García",
+    "fecha_hora": "2024-10-02T18:11:40.891451",
+    "mensaje": "Hay una gran cantidad de basura acumulada en la calle.",
+    "imagen": "https://example.com/images/placeholder.jpg"
+  },
+  {
+    "id": 13,
+    "coordenadas": [-67.5053202658883, -45.88485429569261],
+    "tipo_alerta": "caño roto",
+    "tipo_incidente": "incidente",
+    "usuario": "Laura Romero",
+    "fecha_hora": "2024-09-28T18:11:40.891463",
+    "mensaje": "Se ha roto un caño de agua en la calle.",
+    "imagen": "https://example.com/images/placeholder.jpg"
+  },
+  {
+    "id": 14,
+    "coordenadas": [-67.48709778663508, -45.86173533589913],
+    "tipo_alerta": "acumulación de residuos",
+    "tipo_incidente": "basura",
+    "usuario": "José Sánchez"
+  }
+]
