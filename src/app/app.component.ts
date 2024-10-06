@@ -1,6 +1,6 @@
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import * as L from 'leaflet';
 import { ModalComponent } from './modal/modal.component';
@@ -11,6 +11,8 @@ import { NavbarComponent } from "../../shared/navbar/navbar.component";
 import { FooterComponent } from "../../shared/footer/footer.component";
 import { Observable } from 'rxjs';
 import { HttpClientModule } from '@angular/common/http';
+import { Firestore } from '@angular/fire/firestore';
+
 import { AboutUsComponent } from './about-us/about-us.component';
 
 
@@ -30,6 +32,7 @@ export class AppComponent implements OnInit{
   componentToShow: string | null = null;
   vistaVer$: Observable<boolean>;
   vistaCrear$: Observable<boolean>;
+  firestore: Firestore = inject(Firestore);
 
   constructor(public mapaService: MapaService) {
     this.vistaVer$ = this.mapaService.vistaVer$;

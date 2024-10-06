@@ -16,5 +16,9 @@ export const mapaReducer = createReducer(
         ...formData, // Asegúrate de que formData tenga la estructura de Marker
       },
     },
+  })),
+  on(MapaActions.setMarkerData, (state, { markerData }) => ({
+    ...state,
+    selectedMarkerData: markerData, // Agregar los datos del marcador seleccionado
   }))
 );
