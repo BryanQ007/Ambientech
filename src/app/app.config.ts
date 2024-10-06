@@ -9,7 +9,7 @@ import { appStore } from './store/mapa.store';
 import { MapaService } from './mapa.service';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
-import { environment } from '../enviroments/enviroment';
+import { environment } from '../app/enviroments/enviroment';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }),

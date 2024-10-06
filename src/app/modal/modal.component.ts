@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { map } from 'rxjs/operators';
 import { Marker } from '../marker.interface';
+import { MapaService } from '../mapa.service';
 
 @Component({
   selector: 'app-modal',
@@ -21,7 +22,7 @@ export class ModalComponent implements OnInit {
   selectedMarkerData$: Observable<Marker | null>;
   selectedMarkerData: Marker | null = null;
 
-  constructor(private store: Store<{ mapa: MapaState }>) {
+  constructor(private store: Store<{ mapa: MapaState }>,private mapService: MapaService) {
     this.formData$ = this.store.select(state => state.mapa.formData);
     this.selectedMarkerData$ = this.store.select(state => state.mapa.selectedMarkerData);
   }
@@ -36,6 +37,7 @@ export class ModalComponent implements OnInit {
 
   closeModal() {
     this.store.dispatch(MapaActions.setVistaVer({ vistaVer: false }));
+    this.mapService.enableMapClicks();
   }
 
 }

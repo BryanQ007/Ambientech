@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { FormDataState, MapaState } from './store/mapa.interface';
 import * as MapaActions from './store/mapa.actions';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';  // Importar HttpClient para cargar el JSON
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -21,8 +21,7 @@ export class MapaService {
   vistaCrear$: Observable<boolean>;
   formDate$: Observable<FormDataState>;
   selectedMarkerData$: Observable<Marker | null>;
-
-
+  gibsLayer: L.TileLayer | undefined;
 
   constructor(public store: Store<{ mapa: MapaState }>, private http: HttpClient) {
     this.vistaVer$ = this.store.select(state => state.mapa.vistaVer);
@@ -40,58 +39,46 @@ export class MapaService {
       attribution: '© OpenStreetMap'
     }).addTo(this.map);
 
+    // Cargar la capa GIBS inicialmente
 
-        // Obtener la fecha actual en formato 'YYYY-MM-DD'
-        const today = new Date().toISOString().split('T')[0];
-
-        // Construir la URL de la capa WMTS de GIBS con la fecha de hoy
-        const gibsUrl = `https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_Aerosol/default/${today}/GoogleMapsCompatible_Level6/{z}/{y}/{x}.png`;
-
-        // Capa WMTS de GIBS para MODIS Terra Aerosol con la fecha dinámica
-        const gibsLayer = L.tileLayer(gibsUrl, {
-          maxZoom: 7, // Ajusta según la resolución que necesites
-          attribution: 'NASA GIBS',
-        });
-
-        // Añadir la capa de GIBS al mapa
-        gibsLayer.addTo(this.map);
     this.loadDataFromJson();
-
+    this.loadGibsLayer();
     // Escuchar el evento de clic en el mapa
     this.map.on('click', this.onMapClick.bind(this));
+
+    // Actualizar la capa GIBS cada 10 minutos
+    setInterval(() => {
+      this.loadGibsLayer();
+    }, 10000); // 10 minutos en milisegundos
   }
 
+  loadGibsLayer() {
+    // Remover la capa GIBS anterior si existe
+    if (this.gibsLayer) {
+        this.map!.removeLayer(this.gibsLayer);
+    }
+
+    // Configurar la nueva capa GIBS
+    this.gibsLayer = L.tileLayer('https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?', {
+        attribution: 'NASA/GIBS'
+    }).addTo(this.map!);
+}
 
   loadDataFromJson(): void {
     this.http.get<any[]>('assets/datos.json').subscribe(data => {
       data.forEach(incidente => {
-        const coords = incidente.coordenadas;
-        const tipoIncidente = incidente.tipo_incidente;
-
-        // Crear un icono personalizado dependiendo del tipo_incidente
-        const icon = this.getIcon(tipoIncidente);
-
-        // Crear el marcador con el icono personalizado
-       // const marker = L.marker([coords[0], coords[1]], { icon }).addTo(this.map!);
-        this.cargarMarkersJson(coords,incidente);
-        // Almacenar los datos en el marcador
-
-
-        // Guardar el marcador en el array de markers
-        //this.markers.push(marker);
+        this.cargarMarkersJson(incidente.coordenadas, incidente);
       });
     });
   }
 
-
   cargarMarkersJson(coords: number[], incidente: any) {
     if (this.map && coords.length === 2) {
-      const lat = coords[0];
-      const lng = coords[1];
+      const [lat, lng] = coords;
 
       const markerData: Marker = {
         id: new Date().getTime(),
-        coordenadas: [lat,lng],
+        coordenadas: [lat, lng],
         tipo_incidente: incidente.tipo_incidente,
         usuario: incidente.usuario,
         fecha: new Date(incidente.fecha),
@@ -101,58 +88,62 @@ export class MapaService {
         descripcion: incidente.descripcion,
       };
 
-      const marker = L.marker([lat, lng]).addTo(this.map!);
+      const marker = L.marker([lat, lng]).addTo(this.map);
       marker.bindPopup(`Coordenadas: ${lat}, ${lng}`).openPopup();
 
-          // Asocia el objeto markerData al marcador
-    (marker as any).markerData = markerData;
+      (marker as any).markerData = markerData;
 
-    // Agregar evento de clic al marcador
-    marker.on('click', () => {
-      this.openModal(markerData); // Abre el modal con los datos del marcador
-    });
+      // Agregar evento de clic al marcador
+      marker.on('click', () => {
+        this.openModal(markerData);
+      });
 
       this.markers.push(marker);
-
-      // Aquí puedes hacer algo con markerData, como guardarlo en un array o enviarlo a un servidor
     }
   }
 
-  searchMarker(coords: L.LatLng) {
-    const foundMarker = this.markers.find(marker => marker.getLatLng().equals(coords));
+  searchMarker(coords: L.LatLng, markerId?: number) {
+    console.log('Buscando marcador en:', coords, 'con ID:', markerId);
 
-    if (foundMarker) {
-      // Si se encuentra el marcador, obtenemos los datos
-      const markerData = (foundMarker as any).markerData; // Asegúrate de que markerData está asociado correctamente
+    const foundMarkers = this.markers.filter(marker => {
+      const latLng = marker.getLatLng();
+      return latLng.lat === coords.lat && latLng.lng === coords.lng;
+    });
 
-      // Despachar acción para establecer el marcador seleccionado en el store
-      this.store.dispatch(MapaActions.setSelectedMarkerData({ marker: markerData }));
+    if (foundMarkers.length > 0) {
+      // Si se especifica un ID, buscaremos el marcador específico
+      if (markerId) {
+        const specificMarker = foundMarkers.find(marker => (marker as any).markerData.id === markerId);
+        if (specificMarker) {
+          const markerData = (specificMarker as any).markerData;
+          this.store.dispatch(MapaActions.setSelectedMarkerData({ marker: markerData }));
+          console.log('Marcador específico encontrado:', markerData);
+        } else {
+          console.log('Marcador con ID no encontrado en las coordenadas especificadas.');
+        }
+      } else {
+        // Si no se especifica un ID, seleccionamos el primer marcador encontrado
+        const markerData = (foundMarkers[0] as any).markerData;
+        this.store.dispatch(MapaActions.setSelectedMarkerData({ marker: markerData }));
+        console.log('Marcador encontrado:', markerData);
+      }
     } else {
       console.log('Marcador no encontrado en estas coordenadas.');
     }
   }
 
 
-  // Método para crear un icono personalizado
-  getIcon(tipo_incidente: string): L.Icon {
-    let iconUrl = '';
 
-    switch (tipo_incidente) {
-      case 'basura':
-        iconUrl = 'assets/basura.png'; // Icono personalizado para incendios
-        break;
-      case 'accidente':
-        iconUrl = 'assets/incidente.png'; // Icono personalizado para accidentes
-        break;
-      default:
-        iconUrl = 'assets/incidente.png'; // Icono por defecto
-    }
+  getIcon(tipo_incidente: string): L.Icon {
+    const iconUrl = tipo_incidente === 'basura'
+      ? 'assets/basura.png'
+      : 'assets/incidente.png'; // Icono por defecto
 
     return L.icon({
       iconUrl,
-      iconSize: [32, 32],  // Tamaño del icono
-      iconAnchor: [16, 32],  // Ancla del icono (punto donde se coloca en el mapa)
-      popupAnchor: [0, -32]  // Donde aparece el popup respecto al icono
+      iconSize: [32, 32],
+      iconAnchor: [16, 32],
+      popupAnchor: [0, -32]
     });
   }
 
@@ -160,23 +151,20 @@ export class MapaService {
     console.log('Abriendo modal con los datos:', markerData);
     this.store.dispatch(MapaActions.setVistaVer({ vistaVer: true }));
     this.store.dispatch(MapaActions.setVistaCrear({ vistaCrear: false }));
-    this.searchMarker(L.latLng(markerData.coordenadas[0], markerData.coordenadas[1]));
+    this.disableMapClicks();
+    this.searchMarker(L.latLng(markerData.coordenadas[0], markerData.coordenadas[1]), markerData.id);
   }
-
 
   onMapClick(e: any): void {
     const coords = e.latlng;
 
     if (this.existMarker(coords)) {
-      // Si el marcador existe, no abrir el modal
       this.store.dispatch(MapaActions.setVistaVer({ vistaVer: true }));
       this.store.dispatch(MapaActions.setVistaCrear({ vistaCrear: false }));
       console.log('El marcador ya existe en estas coordenadas.');
     } else {
-      // Si no existe, abrir el modal
       this.store.dispatch(MapaActions.setVistaVer({ vistaVer: false }));
       this.store.dispatch(MapaActions.setVistaCrear({ vistaCrear: true }));
-      // Crear el marcador
       this.crearMarker(coords);
     }
   }
@@ -185,7 +173,6 @@ export class MapaService {
     return this.markers.some(marker => marker.getLatLng().equals(coordenada));
   }
 
-
   crearMarker(coords: L.LatLng) {
     this.selectedLat = coords.lat;
     this.selectedlng = coords.lng;
@@ -193,25 +180,24 @@ export class MapaService {
       const markerData: Marker = {
         id: new Date().getTime(),
         coordenadas: [coords.lat, coords.lng],
-        tipo_incidente: 'nuevo', // o un tipo predeterminado
-        usuario: 'usuario', // o un valor predeterminado
+        tipo_incidente: 'nuevo',
+        usuario: 'usuario',
         fecha: new Date(),
         titulo: 'Nuevo Marcador',
-        prioridad: 'media', // o un valor predeterminado
-        img: '', // si aplica
-        descripcion: 'Descripción del nuevo marcador', // o un valor predeterminado
+        prioridad: 'media',
+        img: '',
+        descripcion: 'Descripción del nuevo marcador',
       };
 
       const marker = L.marker([coords.lat, coords.lng]).addTo(this.map);
       marker.bindPopup(`Coordenadas: ${coords.lat}, ${coords.lng}`).openPopup();
-      this.markers.push(marker);
-
       (marker as any).markerData = markerData;
 
-      // Agregar evento de clic al marcador
       marker.on('click', () => {
-        this.openModal(markerData); // Abre el modal con los datos del marcador
+        this.openModal(markerData);
       });
+
+      this.markers.push(marker);
     }
   }
 
@@ -220,24 +206,23 @@ export class MapaService {
     this.selectedlng = coords.lng;
 
     if (this.map) {
-      // Crear el marcador con los datos del formulario
+      // Asegurarte de que el ID es único
       const markerData: Marker = {
         id: formData.id || new Date().getTime(), // Usar ID existente o generar uno nuevo
         coordenadas: [coords.lat, coords.lng],
-        tipo_incidente: formData.tipo_incidente, // Usar tipo del formulario o uno predeterminado
-        usuario: formData.usuario || 'usuario', // Usar usuario del formulario o uno predeterminado
+        tipo_incidente: formData.tipo_incidente,
+        usuario: formData.usuario || 'usuario',
         fecha: formData.fecha || new Date(),
         titulo: formData.titulo,
-        prioridad: formData.prioridad, // Usar prioridad del formulario o una predeterminada
-        img: formData.img || '', // Si aplica
-        descripcion: formData.descripcion || 'Descripción del nuevo marcador', // Usar descripción del formulario
+        prioridad: formData.prioridad || 'media', // Usar prioridad del formulario o una predeterminada
+        img: formData.img || '',
+        descripcion: formData.descripcion || 'Descripción del nuevo marcador',
       };
 
-      console.log("creando marker form", markerData)
+      console.log("Creando marker form", markerData);
 
       const marker = L.marker([coords.lat, coords.lng]).addTo(this.map);
       marker.bindPopup(`Coordenadas: ${coords.lat}, ${coords.lng}`).openPopup();
-
       (marker as any).markerData = markerData;
 
       // Agregar evento de clic al marcador
@@ -249,26 +234,11 @@ export class MapaService {
     }
   }
 
-/*   cargarMarkersJson(coords: number[]) {
-    if (this.map && coords.length === 2) {
-      const lat = coords[0]; // Latitud
-      const lng = coords[1]; // Longitud
-
-      const marker = L.marker([lat, lng]).addTo(this.map!);
-      marker.bindPopup(`Coordenadas: ${lat}, ${lng}`).openPopup();
-      this.markers.push(marker);
-    }
-  } */
-
-
 
   eliminarUltimoMarker() {
     if (this.markers.length > 0) {
-      // Obtener el último marcador
-      const ultimoMarker = this.markers.pop(); // Elimina el último marcador del array
-
+      const ultimoMarker = this.markers.pop();
       if (ultimoMarker) {
-        // Elimina el marcador del mapa
         this.map?.removeLayer(ultimoMarker);
         console.log('Último marcador eliminado.');
       }
@@ -277,23 +247,19 @@ export class MapaService {
     }
   }
 
-
   disableMapClicks() {
     if (this.map) {
-      this.map.off('click'); // Deshabilita los clics en el mapa
-      // También puedes deshabilitar otros eventos si es necesario
+      this.map.off('click');
     }
   }
 
   enableMapClicks() {
     if (this.map) {
-      this.map.on('click', this.onMapClick.bind(this)); // Vuelve a habilitar el clic
+      this.map.on('click', this.onMapClick.bind(this));
     }
   }
 
   volverComodoro(mapElementId: string){
     this.map!.setView([this.lat, this.lng], 13);
   }
-
-
 }
