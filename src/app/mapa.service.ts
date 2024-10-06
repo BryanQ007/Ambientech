@@ -57,7 +57,7 @@ export class MapaService {
 
         // Crear el marcador con el icono personalizado
        // const marker = L.marker([coords[0], coords[1]], { icon }).addTo(this.map!);
-        this.cargarMarkersJson(coords);
+        this.cargarMarkersJson(coords,incidente);
         // Almacenar los datos en el marcador
 
 
@@ -67,6 +67,40 @@ export class MapaService {
     });
   }
 
+
+  cargarMarkersJson(coords: number[], incidente: any) {
+    if (this.map && coords.length === 2) {
+      const lat = coords[0];
+      const lng = coords[1];
+
+      const markerData: Marker = {
+        id: new Date().getTime(),
+        coordenadas: [lat,lng],
+        tipo_incidente: incidente.tipo_incidente,
+        usuario: incidente.usuario,
+        fecha: new Date(incidente.fecha),
+        titulo: incidente.titulo,
+        prioridad: incidente.prioridad,
+        img: incidente.img,
+        descripcion: incidente.descripcion,
+      };
+
+      const marker = L.marker([lat, lng]).addTo(this.map!);
+      marker.bindPopup(`Coordenadas: ${lat}, ${lng}`).openPopup();
+
+          // Asocia el objeto markerData al marcador
+    (marker as any).markerData = markerData;
+
+    // Agregar evento de clic al marcador
+    marker.on('click', () => {
+      this.openModal(markerData); // Abre el modal con los datos del marcador
+    });
+
+      this.markers.push(marker);
+
+      // Aquí puedes hacer algo con markerData, como guardarlo en un array o enviarlo a un servidor
+    }
+  }
 
 
   // Método para crear un icono personalizado
@@ -90,6 +124,23 @@ export class MapaService {
       iconAnchor: [16, 32],  // Ancla del icono (punto donde se coloca en el mapa)
       popupAnchor: [0, -32]  // Donde aparece el popup respecto al icono
     });
+  }
+
+  openModal(markerData: Marker) {
+    // Aquí puedes despachar una acción para abrir el modal en tu store,
+    // o manejar la lógica directamente si estás utilizando un servicio/modal específico.
+    this.store.dispatch(MapaActions.setVistaVer({ vistaVer: true }));
+    this.store.dispatch(MapaActions.setVistaCrear({ vistaCrear: false }));
+
+    this.store.dispatch(MapaActions.setFormData({
+      formData: {
+        marker: markerData // Asegúrate de que estás envolviendo markerData correctamente
+      }
+    }));
+
+    // Envía los datos del marcador al modal, si es necesario
+    console.log('Datos del marcador:', markerData);
+    // Aquí también puedes implementar la lógica para mostrar el modal
   }
 
 
@@ -119,12 +170,31 @@ export class MapaService {
     this.selectedLat = coords.lat;
     this.selectedlng = coords.lng;
     if (this.map) {
+      const markerData: Marker = {
+        id: new Date().getTime(),
+        coordenadas: [coords.lat, coords.lng],
+        tipo_incidente: 'nuevo', // o un tipo predeterminado
+        usuario: 'usuario', // o un valor predeterminado
+        fecha: new Date(),
+        titulo: 'Nuevo Marcador',
+        prioridad: 'media', // o un valor predeterminado
+        img: '', // si aplica
+        descripcion: 'Descripción del nuevo marcador', // o un valor predeterminado
+      };
+
       const marker = L.marker([coords.lat, coords.lng]).addTo(this.map);
       marker.bindPopup(`Coordenadas: ${coords.lat}, ${coords.lng}`).openPopup();
       this.markers.push(marker);
+
+      (marker as any).markerData = markerData;
+
+      // Agregar evento de clic al marcador
+      marker.on('click', () => {
+        this.openModal(markerData); // Abre el modal con los datos del marcador
+      });
     }
   }
-  cargarMarkersJson(coords: number[]) {
+/*   cargarMarkersJson(coords: number[]) {
     if (this.map && coords.length === 2) {
       const lat = coords[0]; // Latitud
       const lng = coords[1]; // Longitud
@@ -133,7 +203,9 @@ export class MapaService {
       marker.bindPopup(`Coordenadas: ${lat}, ${lng}`).openPopup();
       this.markers.push(marker);
     }
-  }
+  } */
+
+
 
   eliminarUltimoMarker() {
     if (this.markers.length > 0) {

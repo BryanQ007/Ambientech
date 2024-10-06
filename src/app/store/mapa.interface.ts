@@ -1,8 +1,4 @@
-// store/mapa.interface.ts
-
 import { Marker } from "../marker.interface";
-
-
 
 export interface FormDataState {
   marker: Marker;
@@ -11,7 +7,8 @@ export interface FormDataState {
 export interface MapaState {
   vistaVer: boolean;
   vistaCrear: boolean;
-  formData: FormDataState; // Agrega el estado del formulario aquí
+  formData: FormDataState; // Estado del formulario
+  selectedMarkerData: Marker | null; // Añadir esta propiedad
 }
 
 // Estado inicial
@@ -31,4 +28,5 @@ export const initialState: MapaState = {
       descripcion: '',
     },
   },
+  selectedMarkerData: null, // Inicializa como null
 };
