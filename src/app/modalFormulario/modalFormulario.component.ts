@@ -47,23 +47,21 @@ export class ModalFormularioComponent  {
 
 
     onSubmit() {
-
       this.selectedLat = this.mapaService.selectedLat;
       this.selectedLng = this.mapaService.selectedlng;
-
       const formValues = this.form.value;
 
       // Crear un objeto Marker con los datos del formulario
       const markerData: Marker = {
         id: new Date().getTime(), // Generar un ID único
-        coordenadas: [this.mapaService.selectedLat, this.mapaService.selectedlng], // Asigna las coordenadas del marcador
-        tipo_incidente: formValues.image || 'nuevo', // Usa la imagen o un valor predeterminado
-        usuario: 'usuario', // Aquí puedes asignar un valor adecuado
-        fecha: new Date(),
-        titulo: formValues.topic,
-        prioridad: formValues.priority,
-        img: '', // Aquí puedes asignar la imagen si la has manejado
-        descripcion: formValues.description,
+        coordenadas: [this.selectedLat, this.selectedLng], // Asigna las coordenadas del marcador
+        tipo_incidente: formValues.priority, // Usa la prioridad como tipo de incidente
+        usuario: 'usuario', // Asigna un valor para el usuario (puedes obtenerlo dinámicamente si es necesario)
+        fecha: new Date(), // Agrega la fecha
+        titulo: formValues.topic, // Asigna el tema como título
+        prioridad: formValues.priority, // Usa la prioridad
+        img: formValues.image, // Almacena la imagen
+        descripcion: formValues.description, // Descripción opcional
       };
 
       this.mapaService.crearMarkerForm(
@@ -90,6 +88,22 @@ export class ModalFormularioComponent  {
       this.mapaService.enableMapClicks();
     }
 
+/*     const reporteSchema = new mongoose.Schema({
+      id: { type: Number, required: true, unique: true },
+      coordenadas: {
+        type: [Number],  // Arreglo de números [latitud, longitud]
+        required: true,
+        validate: {
+          validator: function (value) {
+            return value.length === 2;  // Valida que tenga exactamente dos coordenadas
+          },
+          message: 'Las coordenadas deben tener exactamente dos valores [latitud, longitud].'
+        }
+      },
+      tipo_alerta: { type: String, required: true },
+      tipo_incidente: { type: String, required: true },
+      imagen: { type: String, required: true }
+    }); */
 
 
   cancel() {

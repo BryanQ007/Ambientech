@@ -105,20 +105,21 @@ export class MapaService {
     }
   }
 
+
   crearMarker(coords: L.LatLng) {
     this.selectedLat = coords.lat;
     this.selectedlng = coords.lng;
 
     const markerData: Marker = {
-      id: new Date().getTime(),
-      coordenadas: [coords.lat, coords.lng],
-      tipo_incidente: 'nuevo',
-      usuario: 'usuario',
-      fecha: new Date(),
-      titulo: 'Nuevo Marcador',
-      prioridad: 'media',
-      img: '',
-      descripcion: 'Descripción del nuevo marcador',
+      id: new Date().getTime(), // Generar un ID único
+      coordenadas: [coords.lat, coords.lng], // Asigna las coordenadas del marcador
+      tipo_incidente: 'nuevo', // Asegúrate de que coincida con la interfaz
+      usuario: 'usuario', // Asegúrate de tener el usuario
+      fecha: new Date(), // Fecha actual
+      titulo: 'Nuevo Marcador', // Título del marcador
+      prioridad: 'media', // Prioridad del marcador
+      img: '', // Imagen del marcador
+      descripcion: 'Descripción del nuevo marcador', // Descripción
     };
 
     const marker = L.marker([coords.lat, coords.lng]).addTo(this.map!);
@@ -132,7 +133,7 @@ export class MapaService {
     this.markers.push(marker);
 
     // Llamar al servicio para crear un reporte
-    this.reporteService.createReporte(markerData, { /* incidente details */ })
+    this.reporteService.createReporte(markerData, { /* detalles del incidente si es necesario */ })
       .subscribe(response => {
         console.log('Reporte creado:', response);
       });
@@ -147,7 +148,7 @@ export class MapaService {
         id: formData.id || new Date().getTime(),
         coordenadas: [coords.lat, coords.lng],
         tipo_incidente: formData.tipo_incidente,
-        usuario: formData.usuario || 'usuario',
+        usuario: formData.usuario || 'usuario', // Asegúrate de tener el usuario
         fecha: formData.fecha || new Date(),
         titulo: formData.titulo,
         prioridad: formData.prioridad || 'media',
@@ -166,7 +167,7 @@ export class MapaService {
       this.markers.push(marker);
 
       // Crear reporte en la API
-      this.reporteService.createReporte(markerData, { /* incidente details */ })
+      this.reporteService.createReporte(markerData, { /* detalles del incidente si es necesario */ })
         .subscribe(response => {
           console.log('Reporte creado:', response);
         });
