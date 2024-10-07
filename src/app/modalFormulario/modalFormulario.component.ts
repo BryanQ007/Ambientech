@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
 import * as MapaActions from '../store/mapa.actions';
 import { Marker } from '../marker.interface';
 import L from 'leaflet';
+import { ReporteService } from '../services/reporte.service';
 @Component({
   selector: 'app-modalFormulario',
   standalone:true,
@@ -27,7 +28,8 @@ export class ModalFormularioComponent  {
   selectedLat:number = 0;
   selectedLng:number = 0;
 
-    constructor(private fb: FormBuilder, public Store: Store<AppState>, public mapaService: MapaService) {
+    constructor(private fb: FormBuilder, public Store: Store<AppState>,
+       public mapaService: MapaService, private reporteService: ReporteService ) {
       this.form = this.fb.group({
         image: [null, Validators.required], // Control para la imagen
         topic: ['', Validators.required], // Control para el tema
@@ -69,6 +71,17 @@ export class ModalFormularioComponent  {
         markerData
       );
 
+      this.reporteService.createReporte(formValues.image, markerData).subscribe({
+        next: (response) => {
+          console.log('Reporte creado:', response);
+          // Aquí puedes manejar la respuesta si es necesario
+        },
+        error: (error) => {
+          console.error('Error al crear el reporte:', error);
+          // Aquí puedes manejar el error si es necesario
+        }
+      });
+
       // Dispatch de la acción para establecer el formData
       this.Store.dispatch(MapaActions.setFormData({ formData: { marker: markerData } }));
       console.log("Datos enviados:", JSON.stringify(markerData, null, 2));
@@ -80,13 +93,23 @@ export class ModalFormularioComponent  {
 
 
   cancel() {
-    this.mapaService.eliminarUltimoMarker();
     this.Store.dispatch(MapaActions.setVistaCrear({ vistaCrear: false }));
     this.mapaService.enableMapClicks();
+    this.mapaService.eliminarUltimoMarker();
   }
 
-  onFileChange(e: any){
-
+  onFileChange(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        // Aquí puedes almacenar la imagen en el formulario si es necesario
+        this.form.patchValue({
+          image: file // Almacena el archivo en el control del formulario
+        });
+      };
+      reader.readAsDataURL(file);
+    }
   }
 }
 

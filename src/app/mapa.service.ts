@@ -6,6 +6,7 @@ import { FormDataState, MapaState } from './store/mapa.interface';
 import * as MapaActions from './store/mapa.actions';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { ReporteService } from './services/reporte.service'; // Importa el servicio de Reporte
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,11 @@ export class MapaService {
   selectedMarkerData$: Observable<Marker | null>;
   gibsLayer: L.TileLayer | undefined;
 
-  constructor(public store: Store<{ mapa: MapaState }>, private http: HttpClient) {
+  constructor(
+    public store: Store<{ mapa: MapaState }>,
+    private http: HttpClient,
+    private reporteService: ReporteService // Inyecta el servicio
+  ) {
     this.vistaVer$ = this.store.select(state => state.mapa.vistaVer);
     this.vistaCrear$ = this.store.select(state => state.mapa.vistaCrear);
     this.formDate$ = this.store.select(state => state.mapa.formData);
@@ -40,36 +45,23 @@ export class MapaService {
     }).addTo(this.map);
 
     // Cargar la capa GIBS inicialmente
-
-    this.loadDataFromJson();
     this.loadGibsLayer();
-    // Escuchar el evento de clic en el mapa
     this.map.on('click', this.onMapClick.bind(this));
 
     // Actualizar la capa GIBS cada 10 minutos
     setInterval(() => {
       this.loadGibsLayer();
-    }, 10000); // 10 minutos en milisegundos
+    }, 10000);
   }
 
   loadGibsLayer() {
-    // Remover la capa GIBS anterior si existe
     if (this.gibsLayer) {
-        this.map!.removeLayer(this.gibsLayer);
+      this.map!.removeLayer(this.gibsLayer);
     }
 
-    // Configurar la nueva capa GIBS
     this.gibsLayer = L.tileLayer('https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?', {
-        attribution: 'NASA/GIBS'
+      attribution: 'NASA/GIBS'
     }).addTo(this.map!);
-}
-
-  loadDataFromJson(): void {
-    this.http.get<any[]>('assets/datos.json').subscribe(data => {
-      data.forEach(incidente => {
-        this.cargarMarkersJson(incidente.coordenadas, incidente);
-      });
-    });
   }
 
   cargarMarkersJson(coords: number[], incidente: any) {
@@ -77,7 +69,7 @@ export class MapaService {
       const [lat, lng] = coords;
 
       const markerData: Marker = {
-        id: new Date().getTime(),
+        id: incidente.id || new Date().getTime(),
         coordenadas: [lat, lng],
         tipo_incidente: incidente.tipo_incidente,
         usuario: incidente.usuario,
@@ -90,15 +82,123 @@ export class MapaService {
 
       const marker = L.marker([lat, lng]).addTo(this.map);
       marker.bindPopup(`Coordenadas: ${lat}, ${lng}`).openPopup();
-
       (marker as any).markerData = markerData;
 
-      // Agregar evento de clic al marcador
       marker.on('click', () => {
         this.openModal(markerData);
       });
 
       this.markers.push(marker);
+    }
+  }
+
+  onMapClick(e: any): void {
+    const coords = e.latlng;
+
+    if (this.existMarker(coords)) {
+      this.store.dispatch(MapaActions.setVistaVer({ vistaVer: true }));
+      this.store.dispatch(MapaActions.setVistaCrear({ vistaCrear: false }));
+    } else {
+      this.store.dispatch(MapaActions.setVistaVer({ vistaVer: false }));
+      this.store.dispatch(MapaActions.setVistaCrear({ vistaCrear: true }));
+      this.crearMarker(coords);
+    }
+  }
+
+  crearMarker(coords: L.LatLng) {
+    this.selectedLat = coords.lat;
+    this.selectedlng = coords.lng;
+
+    const markerData: Marker = {
+      id: new Date().getTime(),
+      coordenadas: [coords.lat, coords.lng],
+      tipo_incidente: 'nuevo',
+      usuario: 'usuario',
+      fecha: new Date(),
+      titulo: 'Nuevo Marcador',
+      prioridad: 'media',
+      img: '',
+      descripcion: 'Descripción del nuevo marcador',
+    };
+
+    const marker = L.marker([coords.lat, coords.lng]).addTo(this.map!);
+    marker.bindPopup(`Coordenadas: ${coords.lat}, ${coords.lng}`).openPopup();
+    (marker as any).markerData = markerData;
+
+    marker.on('click', () => {
+      this.openModal(markerData);
+    });
+
+    this.markers.push(marker);
+
+    // Llamar al servicio para crear un reporte
+    this.reporteService.createReporte(markerData, { /* incidente details */ })
+      .subscribe(response => {
+        console.log('Reporte creado:', response);
+      });
+  }
+
+  crearMarkerForm(coords: L.LatLng, formData: Marker) {
+    this.selectedLat = coords.lat;
+    this.selectedlng = coords.lng;
+
+    if (this.map) {
+      const markerData: Marker = {
+        id: formData.id || new Date().getTime(),
+        coordenadas: [coords.lat, coords.lng],
+        tipo_incidente: formData.tipo_incidente,
+        usuario: formData.usuario || 'usuario',
+        fecha: formData.fecha || new Date(),
+        titulo: formData.titulo,
+        prioridad: formData.prioridad || 'media',
+        img: formData.img || '',
+        descripcion: formData.descripcion || 'Descripción del nuevo marcador',
+      };
+
+      const marker = L.marker([coords.lat, coords.lng]).addTo(this.map);
+      marker.bindPopup(`Coordenadas: ${coords.lat}, ${coords.lng}`).openPopup();
+      (marker as any).markerData = markerData;
+
+      marker.on('click', () => {
+        this.openModal(markerData);
+      });
+
+      this.markers.push(marker);
+
+      // Crear reporte en la API
+      this.reporteService.createReporte(markerData, { /* incidente details */ })
+        .subscribe(response => {
+          console.log('Reporte creado:', response);
+        });
+    }
+  }
+
+  openModal(markerData: Marker) {
+    this.store.dispatch(MapaActions.setVistaVer({ vistaVer: true }));
+    this.store.dispatch(MapaActions.setVistaCrear({ vistaCrear: false }));
+    this.disableMapClicks();
+    this.searchMarker(L.latLng(markerData.coordenadas[0], markerData.coordenadas[1]), markerData.id);
+  }
+
+  existMarker(coordenada: L.LatLng): boolean {
+    return this.markers.some(marker => marker.getLatLng().equals(coordenada));
+  }
+
+  eliminarUltimoMarker() {
+    if (this.markers.length > 0) {
+      const ultimoMarker = this.markers.pop();
+      if (ultimoMarker) {
+        this.map?.removeLayer(ultimoMarker);
+        console.log('Último marcador eliminado.');
+      }
+    } else {
+      console.log('No hay marcadores para eliminar.');
+    }
+  }
+
+  disableMapClicks() {
+    if (this.map) {
+      this.map.off('click');
     }
   }
 
@@ -133,133 +233,13 @@ export class MapaService {
   }
 
 
-
-  getIcon(tipo_incidente: string): L.Icon {
-    const iconUrl = tipo_incidente === 'basura'
-      ? 'assets/basura.png'
-      : 'assets/incidente.png'; // Icono por defecto
-
-    return L.icon({
-      iconUrl,
-      iconSize: [32, 32],
-      iconAnchor: [16, 32],
-      popupAnchor: [0, -32]
-    });
-  }
-
-  openModal(markerData: Marker) {
-    console.log('Abriendo modal con los datos:', markerData);
-    this.store.dispatch(MapaActions.setVistaVer({ vistaVer: true }));
-    this.store.dispatch(MapaActions.setVistaCrear({ vistaCrear: false }));
-    this.disableMapClicks();
-    this.searchMarker(L.latLng(markerData.coordenadas[0], markerData.coordenadas[1]), markerData.id);
-  }
-
-  onMapClick(e: any): void {
-    const coords = e.latlng;
-
-    if (this.existMarker(coords)) {
-      this.store.dispatch(MapaActions.setVistaVer({ vistaVer: true }));
-      this.store.dispatch(MapaActions.setVistaCrear({ vistaCrear: false }));
-      console.log('El marcador ya existe en estas coordenadas.');
-    } else {
-      this.store.dispatch(MapaActions.setVistaVer({ vistaVer: false }));
-      this.store.dispatch(MapaActions.setVistaCrear({ vistaCrear: true }));
-      this.crearMarker(coords);
-    }
-  }
-
-  existMarker(coordenada: L.LatLng): boolean {
-    return this.markers.some(marker => marker.getLatLng().equals(coordenada));
-  }
-
-  crearMarker(coords: L.LatLng) {
-    this.selectedLat = coords.lat;
-    this.selectedlng = coords.lng;
-    if (this.map) {
-      const markerData: Marker = {
-        id: new Date().getTime(),
-        coordenadas: [coords.lat, coords.lng],
-        tipo_incidente: 'nuevo',
-        usuario: 'usuario',
-        fecha: new Date(),
-        titulo: 'Nuevo Marcador',
-        prioridad: 'media',
-        img: '',
-        descripcion: 'Descripción del nuevo marcador',
-      };
-
-      const marker = L.marker([coords.lat, coords.lng]).addTo(this.map);
-      marker.bindPopup(`Coordenadas: ${coords.lat}, ${coords.lng}`).openPopup();
-      (marker as any).markerData = markerData;
-
-      marker.on('click', () => {
-        this.openModal(markerData);
-      });
-
-      this.markers.push(marker);
-    }
-  }
-
-  crearMarkerForm(coords: L.LatLng, formData: Marker) {
-    this.selectedLat = coords.lat;
-    this.selectedlng = coords.lng;
-
-    if (this.map) {
-      // Asegurarte de que el ID es único
-      const markerData: Marker = {
-        id: formData.id || new Date().getTime(), // Usar ID existente o generar uno nuevo
-        coordenadas: [coords.lat, coords.lng],
-        tipo_incidente: formData.tipo_incidente,
-        usuario: formData.usuario || 'usuario',
-        fecha: formData.fecha || new Date(),
-        titulo: formData.titulo,
-        prioridad: formData.prioridad || 'media', // Usar prioridad del formulario o una predeterminada
-        img: formData.img || '',
-        descripcion: formData.descripcion || 'Descripción del nuevo marcador',
-      };
-
-      console.log("Creando marker form", markerData);
-
-      const marker = L.marker([coords.lat, coords.lng]).addTo(this.map);
-      marker.bindPopup(`Coordenadas: ${coords.lat}, ${coords.lng}`).openPopup();
-      (marker as any).markerData = markerData;
-
-      // Agregar evento de clic al marcador
-      marker.on('click', () => {
-        this.openModal(markerData); // Abre el modal con los datos del marcador
-      });
-
-      this.markers.push(marker);
-    }
-  }
-
-
-  eliminarUltimoMarker() {
-    if (this.markers.length > 0) {
-      const ultimoMarker = this.markers.pop();
-      if (ultimoMarker) {
-        this.map?.removeLayer(ultimoMarker);
-        console.log('Último marcador eliminado.');
-      }
-    } else {
-      console.log('No hay marcadores para eliminar.');
-    }
-  }
-
-  disableMapClicks() {
-    if (this.map) {
-      this.map.off('click');
-    }
-  }
-
   enableMapClicks() {
     if (this.map) {
       this.map.on('click', this.onMapClick.bind(this));
     }
   }
 
-  volverComodoro(mapElementId: string){
+  volverComodoro(mapElementId: string) {
     this.map!.setView([this.lat, this.lng], 13);
   }
 }
