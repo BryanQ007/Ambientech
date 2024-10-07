@@ -56,7 +56,7 @@ const { connectToMongo } = require('./database'); // Asegúrate de que esté en 
 const Reporte = require('./reporte'); // Importa el modelo reporte de la misma carpeta
 
 const app = express();
-const PORT = 3000;
+const PORT = 3001;
 
 // Middleware
 app.use(cors()); // Permite solicitudes desde otros orígenes (Angular)

@@ -17,11 +17,19 @@ async function seedDatabase() {
     await Reporte.deleteMany({});
 
 
+
     // Insertar un reporte de prueba
     const reporte1 = new Reporte({
       id: 1,
       coordenadas: [-45.9210, -67.4959],
       tipo_incidente: 'basura',
+      usuario: 'Carlos Méndez',
+      fecha_hora: new Date(),
+      titulo: 'Hay una fuga de agua en la calle principal.',
+      prioridad: 'Media',
+      img: 'https://example.com/images/placeholder.jpg',
+      descripcion: 'Hay una fuga de agua en la calle principal.'
+
       usuario: 'Carlos Méndez',
       fecha_hora: new Date(),
       titulo: 'Hay una fuga de agua en la calle principal.',
@@ -39,6 +47,13 @@ async function seedDatabase() {
       id: 2,
       coordenadas: [-46.3245, -68.2234],
       tipo_incidente: 'daño en la vía pública',
+      usuario: 'Carlos Méndez',
+      fecha_hora: new Date(),
+      titulo: 'Hay una fuga de agua en la calle principal.',
+      prioridad: 'Alta',
+      img: 'https://example.com/images/another-placeholder.jpg',
+      descripcion: 'Hay una fuga de agua en la calle principal.'
+
       usuario: 'Carlos Méndez',
       fecha_hora: new Date(),
       titulo: 'Hay una fuga de agua en la calle principal.',
