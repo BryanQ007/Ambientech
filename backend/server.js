@@ -54,10 +54,9 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const { connectToMongo } = require('./database');  // Asegúrate de que esté en la misma carpeta
 const Reporte = require('./reporte');  // Importa el modelo reporte de la misma carpeta
-const Incidente = require('./incidente');  // Importa el modelo incidente de la misma carpeta
 
 const app = express();
-const PORT = 3000;
+const PORT = 3001;
 
 // Middleware
 app.use(cors());  // Permite solicitudes desde otros orígenes (Angular)

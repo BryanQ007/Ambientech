@@ -12,9 +12,14 @@ const reporteSchema = new mongoose.Schema({
       message: 'Las coordenadas deben tener exactamente dos valores [latitud, longitud].'
     }
   },
-  tipo_alerta: { type: String, required: true },
   tipo_incidente: { type: String, required: true },
-  imagen: { type: String, required: true }
+  usuario: { type: String, required: true },
+  fecha_hora: { type: Date, required: true, default: Date.now },
+  titulo: { type: String, required: true },
+  prioridad: { type: String, required: true },
+  img: { type: String, required: true },
+  descripcion: { type: String, required: true }
+
 });
 
 // Exportar el modelo de Mongoose
