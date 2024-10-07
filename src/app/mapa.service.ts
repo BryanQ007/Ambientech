@@ -42,26 +42,24 @@ export class MapaService {
     // Cargar la capa GIBS inicialmente
 
     this.loadDataFromJson();
-    this.loadGibsLayer();
+    //this.loadGibsLayer();
     // Escuchar el evento de clic en el mapa
     this.map.on('click', this.onMapClick.bind(this));
 
-    // Actualizar la capa GIBS cada 10 minutos
-    setInterval(() => {
-      this.loadGibsLayer();
-    }, 10000); // 10 minutos en milisegundos
-  }
+    // Obtener la fecha actual en formato 'YYYY-MM-DD'
+    const today = new Date().toISOString().split('T')[0];
 
-  loadGibsLayer() {
-    // Remover la capa GIBS anterior si existe
-    if (this.gibsLayer) {
-        this.map!.removeLayer(this.gibsLayer);
-    }
+    // Construir la URL de la capa WMTS de GIBS con la fecha de hoy
+    const gibsUrl = `https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_Aerosol/default/${today}/GoogleMapsCompatible_Level6/{z}/{y}/{x}.png`;
 
-    // Configurar la nueva capa GIBS
-    this.gibsLayer = L.tileLayer('https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?', {
-        attribution: 'NASA/GIBS'
-    }).addTo(this.map!);
+    // Capa WMTS de GIBS para MODIS Terra Aerosol con la fecha dinámica
+    const gibsLayer = L.tileLayer(gibsUrl, {
+      maxZoom: 7, // Ajusta según la resolución que necesites
+      attribution: 'NASA GIBS',
+    });
+
+    // Añadir la capa de GIBS al mapa
+    gibsLayer.addTo(this.map);
 }
 
   loadDataFromJson(): void {

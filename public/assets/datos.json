@@ -1,22 +1,135 @@
+
 [
   {
     "id": 1,
-    "coordenadas":  [-45.9210,-67.4959 ],
-    "tipo_alerta": "desperfecto eléctrico",
+    "coordenadas": [-45.8445, -67.5079],
+    "titulo": "desperfecto eléctrico",
     "tipo_incidente": "basura",
     "usuario": "Sofía Romero",
     "fecha_hora": "2024-09-29T18:11:40.891118",
-    "mensaje": "Hay un poste de luz que está a punto de caerse.",
-    "imagen": "https://example.com/images/placeholder.jpg"
+    "descripcion": "Hay un poste de luz que está a punto de caerse.",
+    "prioridad": "alta",
+    "imagen": "https://diariocronica1.cdn.net.ar/252/storage252/images/94/27/942769_94b0a10145460c24daf27ce8b449b6d5d28d7f6e47731bd707e25a9a41503d23/lg.webp"
   },
   {
     "id": 2,
-    "coordenadas": [-45.8251, -67.5399 ],
-    "tipo_alerta": "desperfecto eléctrico",
+    "coordenadas": [-45.8345, -67.5679],
+    "titulo": "desperfecto eléctrico",
     "tipo_incidente": "incidente",
     "usuario": "Pedro Sánchez",
     "fecha_hora": "2024-10-03T18:11:40.891350",
-    "mensaje": "Hay un poste de luz que está a punto de caerse.",
-    "imagen": "https://example.com/images/placeholder.jpg"
+    "descripcion": "Hay un poste de luz que está a punto de caerse.",
+    "prioridad": "media",
+    "imagen": "https://diariocronica1.cdn.net.ar/252/storage252/images/94/27/942769_94b0a10145460c24daf27ce8b449b6d5d28d7f6e47731bd707e25a9a41503d23/lg.webp"
+  },
+  {
+    "id": 3,
+    "coordenadas": [-45.8545, -67.5479],
+    "titulo": "incendio en poste",
+    "tipo_incidente": "incendio",
+    "usuario": "María González",
+    "fecha_hora": "2024-10-02T16:23:40.123456",
+    "descripcion": "Incendio en un poste eléctrico.",
+    "prioridad": "alta",
+    "imagen": "https://diariocronica1.cdn.net.ar/252/storage252/images/94/27/942769_94b0a10145460c24daf27ce8b449b6d5d28d7f6e47731bd707e25a9a41503d23/lg.webp"
+  },
+  {
+    "id": 4,
+    "coordenadas": [-45.8045, -67.5279],
+    "titulo": "accidente vehicular",
+    "tipo_incidente": "accidente",
+    "usuario": "Juan Pérez",
+    "fecha_hora": "2024-10-04T09:17:15.987654",
+    "descripcion": "Accidente vehicular cerca del poste de luz.",
+    "prioridad": "alta",
+    "imagen": "https://diariocronica1.cdn.net.ar/252/storage252/images/94/27/942769_94b0a10145460c24daf27ce8b449b6d5d28d7f6e47731bd707e25a9a41503d23/lg.webp"
+  },
+  {
+    "id": 5,
+    "coordenadas": [-45.8145, -67.5479],
+    "titulo": "cables sueltos",
+    "tipo_incidente": "basura",
+    "usuario": "Lucía López",
+    "fecha_hora": "2024-10-03T08:15:10.987654",
+    "descripcion": "Cables sueltos cerca de la basura.",
+    "prioridad": "media",
+    "imagen": "https://diariocronica1.cdn.net.ar/252/storage252/images/94/27/942769_94b0a10145460c24daf27ce8b449b6d5d28d7f6e47731bd707e25a9a41503d23/lg.webp"
+  },
+  {
+    "id": 6,
+    "coordenadas": [-45.8545, -67.5279],
+    "titulo": "problema eléctrico",
+    "tipo_incidente": "incidente",
+    "usuario": "Carlos Herrera",
+    "fecha_hora": "2024-10-01T19:45:30.654321",
+    "descripcion": "Poste con problemas eléctricos.",
+    "prioridad": "baja",
+    "imagen": "https://diariocronica1.cdn.net.ar/252/storage252/images/94/27/942769_94b0a10145460c24daf27ce8b449b6d5d28d7f6e47731bd707e25a9a41503d23/lg.webp"
+  },
+  {
+    "id": 7,
+    "coordenadas": [-45.8045, -67.5579],
+    "titulo": "accidente de tránsito",
+    "tipo_incidente": "accidente",
+    "usuario": "Ana Martínez",
+    "fecha_hora": "2024-09-30T17:05:45.012345",
+    "descripcion": "Colisión de dos autos, uno golpeó un poste.",
+    "prioridad": "alta",
+    "imagen": "https://diariocronica1.cdn.net.ar/252/storage252/images/94/27/942769_94b0a10145460c24daf27ce8b449b6d5d28d7f6e47731bd707e25a9a41503d23/lg.webp"
+  },
+  {
+    "id": 8,
+    "coordenadas": [-45.8345, -67.5179],
+    "titulo": "cables sueltos",
+    "tipo_incidente": "basura",
+    "usuario": "Daniel Fernández",
+    "fecha_hora": "2024-10-03T13:22:40.765432",
+    "descripcion": "Cable suelto cerca de un montón de basura.",
+    "prioridad": "media",
+    "imagen": "https://diariocronica1.cdn.net.ar/252/storage252/images/94/27/942769_94b0a10145460c24daf27ce8b449b6d5d28d7f6e47731bd707e25a9a41503d23/lg.webp"
+  },
+  {
+    "id": 9,
+    "coordenadas": [-45.8445, -67.5579],
+    "titulo": "poste inclinado",
+    "tipo_incidente": "incidente",
+    "usuario": "Sandra Torres",
+    "fecha_hora": "2024-10-05T15:20:30.123654",
+    "descripcion": "El poste parece inclinado, riesgo de caída.",
+    "prioridad": "media",
+    "imagen": "https://diariocronica1.cdn.net.ar/252/storage252/images/94/27/942769_94b0a10145460c24daf27ce8b449b6d5d28d7f6e47731bd707e25a9a41503d23/lg.webp"
+  },
+  {
+    "id": 10,
+    "coordenadas": [-45.8245, -67.5279],
+    "titulo": "cables expuestos",
+    "tipo_incidente": "basura",
+    "usuario": "Miguel Vázquez",
+    "fecha_hora": "2024-10-04T12:33:20.321654",
+    "descripcion": "Cables sueltos, peligro eléctrico.",
+    "prioridad": "alta",
+    "imagen": "https://diariocronica1.cdn.net.ar/252/storage252/images/94/27/942769_94b0a10145460c24daf27ce8b449b6d5d28d7f6e47731bd707e25a9a41503d23/lg.webp"
+  },
+  {
+    "id": 11,
+    "coordenadas": [-45.8045, -67.5179],
+    "titulo": "cables sueltos",
+    "tipo_incidente": "incidente",
+    "usuario": "Roberto Díaz",
+    "fecha_hora": "2024-10-05T11:17:50.564321",
+    "descripcion": "Cables sueltos en poste de luz.",
+    "prioridad": "baja",
+    "imagen": "https://diariocronica1.cdn.net.ar/252/storage252/images/94/27/942769_94b0a10145460c24daf27ce8b449b6d5d28d7f6e47731bd707e25a9a41503d23/lg.webp"
+  },
+  {
+    "id": 12,
+    "coordenadas": [-45.8545, -67.5179],
+    "titulo": "poste con cables expuestos",
+    "tipo_incidente": "basura",
+    "usuario": "Elena Morales",
+    "fecha_hora": "2024-10-06T10:45:10.987654",
+    "descripcion": "Poste de luz con cables expuestos.",
+    "prioridad": "media",
+    "imagen": "https://diariocronica1.cdn.net.ar/252/storage252/images/94/27/942769_94b0a10145460c24daf27ce8b449b6d5d28d7f6e47731bd707e25a9a41503d23/lg.webp"
   }
 ]

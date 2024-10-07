@@ -9,11 +9,12 @@ import { MatCardModule } from '@angular/material/card';
 import { map } from 'rxjs/operators';
 import { Marker } from '../marker.interface';
 import { MapaService } from '../mapa.service';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-modal',
   standalone: true,
-  imports: [MatButtonModule, MatCardModule, CommonModule],
+  imports: [MatButtonModule, MatCardModule, CommonModule,MatIcon],
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.css']
 })
@@ -21,6 +22,7 @@ export class ModalComponent implements OnInit {
   formData$: Observable<FormDataState>;
   selectedMarkerData$: Observable<Marker | null>;
   selectedMarkerData: Marker | null = null;
+  likes:number = 7;
 
   constructor(private store: Store<{ mapa: MapaState }>,private mapService: MapaService) {
     this.formData$ = this.store.select(state => state.mapa.formData);
@@ -33,6 +35,10 @@ export class ModalComponent implements OnInit {
       this.selectedMarkerData = markerData;
       console.log("Datos del marcador seleccionado:", JSON.stringify(markerData, null, 2));
     });
+  }
+
+  incrementLikes(){
+    this.likes += 1;
   }
 
   closeModal() {
